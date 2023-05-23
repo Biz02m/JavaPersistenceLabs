@@ -27,6 +27,7 @@ public class Main {
                 case "delete entry" -> deleteEntry();
                 case "print all" -> printAll();
                 case "special queries" -> specialQueries();
+                case "test" -> test();
             }
         }
 
@@ -50,6 +51,7 @@ public class Main {
                 System.out.println("Put in: name , level, name of the tower");
                 name = sc.nextLine();
                 int level = sc.nextInt();
+                sc.nextLine();
                 String towerName = sc.nextLine();
                 if (!towerName.equals("")) {
                     Tower tower = em.find(Tower.class, towerName);
@@ -72,6 +74,27 @@ public class Main {
     }
 
     public static void printAll(){
+        System.out.println("-=================-");
+        System.out.println("Database Contents");
+        System.out.println("-=================-");
+
+        System.out.println("Towers:");
+        Query towersQ = em.createQuery("SELECT t FROM Tower t", Tower.class);
+        List<Tower> towers = towersQ.getResultList();
+        for(Tower t: towers){
+            System.out.println(t);
+            List<Mage> mageList= t.getMages();
+            for(Mage m: mageList){
+                System.out.println(m);
+            }
+        }
+
+        System.out.println("Mages:");
+        Query magesQ = em.createQuery("SELECT p FROM Mage p", Mage.class);
+        List<Mage> mages = magesQ.getResultList();
+        for (Mage m: mages) {
+            System.out.println(m);
+        }
 
     }
 
@@ -79,25 +102,21 @@ public class Main {
 
     }
 
-    public void test(){
+    public static void test(){
 
         em.getTransaction().begin();
         Tower tower = new Tower("White tower", 99);
         em.persist(tower);
+
+        em.persist(new Mage("Gandalf the white", 99, tower));
+        em.persist(new Mage("Gandalf the brown", 69, tower));
+        em.persist(new Mage("Gandalf the gray", 8, tower));
         em.getTransaction().commit();
-
-        em.persist(new Mage("Gandalf the white", 99));
-        em.persist(new Mage("Gandalf the brown", 69));
-        em.persist(new Mage("Gandalf the gray", 8));
-        em.getTransaction().commit();
-
-
 
         Query query = em.createQuery("SELECT p FROM Mage p", Mage.class);
         List<Mage> mages = query.getResultList();
         for (Mage m: mages) {
             System.out.println(m.getName());
         }
-        em.close();
     }
 }

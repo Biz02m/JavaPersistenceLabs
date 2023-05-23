@@ -19,7 +19,7 @@ public class Tower {
         this.height = height;
     }
 
-    @OneToMany(mappedBy = "tower")
+    @OneToMany(mappedBy = "tower", cascade = CascadeType.REMOVE)
     private List<Mage> mages;
 
     public String getName() {
@@ -52,5 +52,14 @@ public class Tower {
     @Override
     public int hashCode() {
         return Objects.hash(name, height, mages);
+    }
+
+    @Override
+    public String toString() {
+        return "Tower{" +
+                "name='" + name + '\'' +
+                ", height=" + height +
+                ", mages=" + mages +
+                '}';
     }
 }
