@@ -61,4 +61,13 @@ public class Mage {
     public int hashCode() {
         return Objects.hash(name, level, tower);
     }
+
+    @Override
+    public String toString() {
+        return "Mage{" +
+                "name='" + name + '\'' +
+                ", level=" + level +
+                ", tower=" + tower +
+                '}';
+    }
 }
