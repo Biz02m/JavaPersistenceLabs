@@ -1,5 +1,6 @@
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,9 +18,10 @@ public class Tower {
     public Tower(String name, int height){
         this.name = name;
         this.height = height;
+        this.mages = new ArrayList<>();
     }
 
-    @OneToMany(mappedBy = "tower", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "tower", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Mage> mages;
 
     public String getName() {

@@ -24,7 +24,7 @@ public class Mage {
         this.tower = tower;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Tower tower;
 
     public String getId() {
