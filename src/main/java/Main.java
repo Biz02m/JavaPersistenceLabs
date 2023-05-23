@@ -4,11 +4,82 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.Query;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
+    public static EntityManagerFactory factory;
+    public static EntityManager em;
+    public static Scanner sc;
+    public static boolean done;
+
     public static void main(String[] args) {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("rpgPu");
-        EntityManager em = factory.createEntityManager();
+        factory = Persistence.createEntityManagerFactory("rpgPu");
+        em = factory.createEntityManager();
+        sc = new Scanner(System.in);
+
+        done = false;
+        while(!done){
+            System.out.println("Put in:");
+            System.out.println("quit | new entry | delete entry | print all | special queries");
+            switch (sc.nextLine()) {
+                case "quit" -> done = true;
+                case "new entry" -> newEntry();
+                case "delete entry" -> deleteEntry();
+                case "print all" -> printAll();
+                case "special queries" -> specialQueries();
+            }
+        }
+
+    }
+
+    public static void newEntry(){
+        System.out.println("Put in: tower | mage");
+        String name = sc.nextLine();
+
+        switch (name) {
+            case "tower" -> {
+                System.out.println("Put in: name , height of the tower");
+                name = sc.nextLine();
+                int height = sc.nextInt();
+                sc.nextLine();
+                em.getTransaction().begin();
+                em.persist(new Tower(name, height));
+                em.getTransaction().commit();
+            }
+            case "mage" -> {
+                System.out.println("Put in: name , level, name of the tower");
+                name = sc.nextLine();
+                int level = sc.nextInt();
+                String towerName = sc.nextLine();
+                if (!towerName.equals("")) {
+                    Tower tower = em.find(Tower.class, towerName);
+                    if(tower != null){
+                        em.persist(new Mage(name,level,tower));
+                    }else{
+                        System.out.println("Tower not found in database, not committing");
+                    }
+                } else {
+                    System.out.println("name of the tower not given, not committing to database");
+                }
+            }
+            default -> System.out.println("Wrong input");
+        }
+
+    }
+
+    public static void deleteEntry(){
+
+    }
+
+    public static void printAll(){
+
+    }
+
+    public static void specialQueries(){
+
+    }
+
+    public void test(){
 
         em.getTransaction().begin();
         Tower tower = new Tower("White tower", 99);
